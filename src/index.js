@@ -11,14 +11,18 @@ import Svg, {
 } from 'react-native-svg'
 import genMatrix from './genMatrix'
 import transformMatrixIntoPath from './transformMatrixIntoPath'
+import LogoSVG from './LogoSVG'
 
 const renderLogo = ({
   size,
+  backgroundColor,
   logo,
+  logoSVG,
   logoSize,
   logoBackgroundColor,
+  logoColor,
   logoMargin,
-  logoBorderRadius
+  logoBorderRadius,
 }) => {
   const logoPosition = (size - logoSize - logoMargin * 2) / 2
   const logoBackgroundSize = logoSize + logoMargin * 2
@@ -49,18 +53,27 @@ const renderLogo = ({
         <Rect
           width={logoBackgroundSize}
           height={logoBackgroundSize}
-          fill={logoBackgroundColor}
+          fill={backgroundColor}
           clipPath='url(#clip-logo-background)'
         />
       </G>
-      <G x={logoMargin} y={logoMargin}>
-        <Image
-          width={logoSize}
-          height={logoSize}
-          preserveAspectRatio='xMidYMid slice'
-          href={logo}
-          clipPath='url(#clip-logo)'
+      <G x={logoMargin} y={logoMargin} clipPath='url(#clip-logo)'>
+        <Rect
+            width={logoBackgroundSize - logoMargin}
+            height={logoBackgroundSize - logoMargin}
+            fill={logoBackgroundColor}
         />
+        {logoSVG ? (
+            <LogoSVG svg={logoSVG} logoSize={logoSize} logoColor={logoColor} />
+        ) : (
+            <Image
+              width={logoSize}
+              height={logoSize}
+              preserveAspectRatio='xMidYMid slice'
+              href={logo}
+              clipPath='url(#clip-logo)'
+        />
+        )}
       </G>
     </G>
   )
@@ -72,8 +85,10 @@ const QRCode = ({
   color = 'black',
   backgroundColor = 'white',
   logo,
+  logoSVG,
   logoSize = size * 0.2,
   logoBackgroundColor = 'transparent',
+  logoColor,
   logoMargin = 2,
   logoBorderRadius = 0,
   quietZone = 0,
@@ -101,7 +116,8 @@ const QRCode = ({
     return null
   }
 
-  const { path, cellSize } = result
+  const { path, cellSize } = result;
+  const displayLogo = logo || logoSVG;
 
   return (
     <Svg
@@ -144,14 +160,17 @@ const QRCode = ({
           strokeWidth={cellSize}
         />
       </G>
-      {logo &&
+      {displayLogo &&
         renderLogo({
           size,
+          backgroundColor,
           logo,
+          logoSVG,
           logoSize,
           logoBackgroundColor,
+          logoColor,
           logoMargin,
-          logoBorderRadius
+          logoBorderRadius,
         })}
     </Svg>
   )

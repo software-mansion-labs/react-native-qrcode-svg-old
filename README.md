@@ -1,3 +1,8 @@
+# IMPORTANT
+This is old fork of `react-native-qrcode-svg` pre changing ownership. Do not use this fork, use https://github.com/software-mansion-labs/react-native-qrcode-svg instead.
+
+--------
+
 # Looking for maintainers
 I'm not working on any React Native projects anymore. Feel free to take over this project if you feel good about it!
 
